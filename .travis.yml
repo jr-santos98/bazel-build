@@ -1,4 +1,3 @@
-#Vendo se builda
 os: linux
 arch: ppc64le
 sudo: required
@@ -19,14 +18,13 @@ install:
   - sudo apt install default-jre default-jdk
 
 script:
-  #Testando build
   - wget -q https://oplab9.parqtec.unicamp.br/pub/ppc64el/bazel/ubuntu_${dist_version}/bazel_bin_ppc64le_1.0.0
   - sudo mv bazel_bin_ppc64le_1.0.0 /usr/local/bin/bazel
   - sudo chmod +x /usr/local/bin/bazel
   - git clone --depth 1 https://github.com/bazelbuild/bazel.git
   #- git clone https://github.com/bazelbuild/bazel.git
-  #- rm bazel/src/main/java/com/google/devtools/build/lib/syntax/BUILD 
-  #- mv BUILD bazel/src/main/java/com/google/devtools/build/lib/syntax/
+  - rm bazel/src/main/java/com/google/devtools/build/lib/syntax/BUILD 
+  - mv BUILD bazel/src/main/java/com/google/devtools/build/lib/syntax/
   - cd bazel
   #- git checkout 8ae9f75d6daee8409a11bd50070be42739107db3
   - bazel --nomaster_bazelrc --bazelrc=/dev/null version
