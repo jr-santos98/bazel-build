@@ -26,7 +26,7 @@ script:
   - rm bazel/src/main/java/com/google/devtools/build/lib/syntax/BUILD 
   - mv BUILD bazel/src/main/java/com/google/devtools/build/lib/syntax/
   - cd bazel
-  #- git checkout 8ae9f75d6daee8409a11bd50070be42739107db3
+  - git checkout 6ba6ec8fc615c62b26f54ab73345e029de883a07
   - bazel --nomaster_bazelrc --bazelrc=/dev/null version
   - bazel --nomaster_bazelrc --bazelrc=/dev/null info
   - bazel build --host_javabase=@local_jdk//:jdk -- //src:bazel //src:bazel_jdk_minimal //src:test_repos
