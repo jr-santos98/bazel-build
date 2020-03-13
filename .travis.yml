@@ -6,7 +6,10 @@ go:
 - "1.13.x"
 
 cache:
-  - jvm
+- jre
+- jdk
+
+cache:
   directories:
     - /home/travis/.cache/bazel
 
