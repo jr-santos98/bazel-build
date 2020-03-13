@@ -5,9 +5,9 @@ language: go
 go:
 - "1.13.x"
 
- cache:
-    directories:
-     - /home/travis/.cache/bazel
+cache:
+  directories:
+    - /home/travis/.cache/bazel
 
 jobs:
   include:
