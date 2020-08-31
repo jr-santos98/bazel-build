@@ -22,19 +22,24 @@ jobs:
 
 install:
   - sudo apt update
-  - sudo apt install build-essential python zip unzip gcc
-  - sudo apt install default-jre default-jdk
+  ##- sudo apt install build-essential python zip unzip gcc
+  ##- sudo apt install default-jre default-jdk
+  - sudo apt install rpm
 
 script:
-  - wget -q https://oplab9.parqtec.unicamp.br/pub/ppc64el/bazel/ubuntu_${dist_version}/bazel_bin_ppc64le_2.0.0
-  - sudo mv bazel_bin_ppc64le_2.0.0 /usr/local/bin/bazel
-  - sudo chmod +x /usr/local/bin/bazel
-  - git clone --depth 1 https://github.com/bazelbuild/bazel.git
+  - rpm --version
+  - rpmbuild --target ppc64le -bb bazel.spec
+  - cd ~/rpmbuild/BUILD
+  - ls
+  ##- wget -q https://oplab9.parqtec.unicamp.br/pub/ppc64el/bazel/ubuntu_${dist_version}/bazel_bin_ppc64le_2.0.0
+  ##- sudo mv bazel_bin_ppc64le_2.0.0 /usr/local/bin/bazel
+  ##- sudo chmod +x /usr/local/bin/bazel
+  ##- git clone --depth 1 https://github.com/bazelbuild/bazel.git
   #- git clone https://github.com/bazelbuild/bazel.git
-  - rm bazel/src/main/java/com/google/devtools/build/lib/syntax/BUILD 
-  - mv BUILD bazel/src/main/java/com/google/devtools/build/lib/syntax/
-  - cd bazel
+  ##- rm bazel/src/main/java/com/google/devtools/build/lib/syntax/BUILD 
+  ##- mv BUILD bazel/src/main/java/com/google/devtools/build/lib/syntax/
+  ##- cd bazel
   #- git checkout 3674131d69d46ef6de95ca640033380947b44d19
-  - bazel --nomaster_bazelrc --bazelrc=/dev/null version
-  - bazel --nomaster_bazelrc --bazelrc=/dev/null info
-  - bazel build --host_javabase=@local_jdk//:jdk -- //src:bazel //src:bazel_jdk_minimal //src:test_repos
+  ##- bazel --nomaster_bazelrc --bazelrc=/dev/null version
+  ##- bazel --nomaster_bazelrc --bazelrc=/dev/null info
+  ##- bazel build --host_javabase=@local_jdk//:jdk -- //src:bazel //src:bazel_jdk_minimal //src:test_repos
