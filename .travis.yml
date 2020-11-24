@@ -1,45 +1,25 @@
 os: linux
 arch: ppc64le
 sudo: required
-language: go
-go:
-- "1.13.x"
-
-cache:
-- jre
-- jdk
-
-cache:
-  directories:
-    - /home/travis/.cache/bazel
-
-jobs:
-  include:
-    - dist: xenial
-      env: dist_version=16.04
-    - dist: bionic
-      env: dist_version=18.04
+language: shell
 
 install:
   - sudo apt update
+  - sudo apt-get install build-essential openjdk-8-jdk python zip unzip
+  - github_version=0.29.1
   ##- sudo apt install build-essential python zip unzip gcc
   ##- sudo apt install default-jre default-jdk
-  - sudo apt install rpm
+  #- sudo apt install rpm
 
 script:
-  - rpm --version
-  - rpmbuild --target ppc64le -bb bazel.spec
-  - cd ~/rpmbuild/BUILD
-  - ls
-  ##- wget -q https://oplab9.parqtec.unicamp.br/pub/ppc64el/bazel/ubuntu_${dist_version}/bazel_bin_ppc64le_2.0.0
-  ##- sudo mv bazel_bin_ppc64le_2.0.0 /usr/local/bin/bazel
-  ##- sudo chmod +x /usr/local/bin/bazel
-  ##- git clone --depth 1 https://github.com/bazelbuild/bazel.git
-  #- git clone https://github.com/bazelbuild/bazel.git
-  ##- rm bazel/src/main/java/com/google/devtools/build/lib/syntax/BUILD 
-  ##- mv BUILD bazel/src/main/java/com/google/devtools/build/lib/syntax/
-  ##- cd bazel
-  #- git checkout 3674131d69d46ef6de95ca640033380947b44d19
-  ##- bazel --nomaster_bazelrc --bazelrc=/dev/null version
-  ##- bazel --nomaster_bazelrc --bazelrc=/dev/null info
-  ##- bazel build --host_javabase=@local_jdk//:jdk -- //src:bazel //src:bazel_jdk_minimal //src:test_repos
+  - wget https://oplab9.parqtec.unicamp.br/pub/ppc64el/bazel/ubuntu_14.04/bazel_bin_ppc64le_0.27.2
+  - sudo mv bazel_bin_ppc64le_0.27.2 /usr/local/bin/bazel
+  - sudo chmod +x /usr/local/bin/bazel
+  - wget -q https://github.com/bazelbuild/bazel/releases/download/$github_version/bazel-$github_version-dist.zip
+  - unzip -q bazel-$github_version-dist.zip -d bazel
+  - git clone https://github.com/Unicamp-OpenPower/patch-apply
+  - ./patch-apply/apply_patch.py bazel patchs
+  - cd bazel
+  - sudo EXTRA_BAZEL_ARGS=--host_javabase=@local_jdk//:jdk ./compile.sh
+  - sudo mv output/bazel output/bazel_bin_ppc64le_$github_version
+  - lftp -c "open -u $USER,$PASS ftp://oplab9.parqtec.unicamp.br; put -O /ppc64el/bazel/ubuntu_14.04 output/bazel_bin_ppc64le_$github_version"
